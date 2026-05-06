@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 26, 202 at 12:08 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 7.4.19
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 06, 2026 lúc 07:21 AM
+-- Phiên bản máy phục vụ: 10.4.11-MariaDB
+-- Phiên bản PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,22 +19,20 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `courseonline`
+-- Cơ sở dữ liệu: `courseonline`
 --
-CREATE DATABASE IF NOT EXISTS `courseonline` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `courseonline`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admins`
+-- Cấu trúc bảng cho bảng `admins`
 --
 
 CREATE TABLE `admins` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `fullname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -41,19 +40,21 @@ CREATE TABLE `admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `admins`
+-- Đang đổ dữ liệu cho bảng `admins`
 --
 
 INSERT INTO `admins` (`id`, `fullname`, `email`, `password`, `phone`, `role`, `created_at`, `updated_at`) VALUES
+(1, 'Huynh Dong', 'd01295306466@gmail.com', '$2y$10$fZRhZPs0HouFwV6K4rqhGulAgx0LFD.1GQzl4YADsaMmJf0Wzvw3K', '0839243436', 'Admin', '2026-04-24 10:57:11', '2026-04-24 10:57:11'),
 (3, 'Tran Nguyen Khang', 'admin@gmail.com', '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', '0839243436', 'Admin', '2021-05-14 20:43:16', '2021-05-21 23:38:56'),
 (5, 'Vo Trung Nguyen', 'manager1@gmail.com', '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', '0915897375', 'Manager', '2021-05-15 00:06:26', '2021-05-21 23:48:16'),
 (7, 'Ly Thanh Duc', 'manager2@gmail.com', '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', '0916510664', 'Manager', '2021-05-15 02:03:36', '2021-05-15 02:03:36'),
-(8, 'Pham Bao Khang', 'manager3@gmail.com', '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', '0915897375', 'Manager', '2021-05-19 07:54:33', '2021-05-19 07:54:33');
+(8, 'Pham Bao Khang', 'manager3@gmail.com', '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', '0915897375', 'Manager', '2021-05-19 07:54:33', '2021-05-19 07:54:33'),
+(9, 'Nguyen Dinh Tri', 'manager4@gmail.com', '$2y$10$M.wFV/oJzOYlGIwDR0CAi.d0Fu5CTVmyp3NWEgkpyzsXUkuv8lut2', '0362395347', 'Manager', '2026-04-24 11:20:25', '2026-04-24 11:20:25');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `class_rooms`
+-- Cấu trúc bảng cho bảng `class_rooms`
 --
 
 CREATE TABLE `class_rooms` (
@@ -65,23 +66,10 @@ CREATE TABLE `class_rooms` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `class_rooms`
---
-
-INSERT INTO `class_rooms` (`id`, `course_id`, `schedule`, `start`, `created_at`, `updated_at`) VALUES
-(1, 10, 'Evening 3-5-7', '2021-03-06', '2021-05-15 06:04:25', '2021-05-15 06:12:54'),
-(3, 3, 'Evening 2-4-6', '2021-03-06', '2021-05-15 06:05:22', '2021-05-15 06:05:22'),
-(4, 4, 'Evening 3-5-7', '2021-03-06', '2021-05-15 06:05:43', '2021-05-15 06:05:43'),
-(5, 2, 'Evening 2-4-6', '2021-03-08', '2021-05-15 06:05:58', '2021-05-15 06:05:58'),
-(6, 3, 'Afternoon 2-4-6', '2021-07-07', '2021-05-19 07:42:45', '2021-05-21 02:29:51'),
-(7, 2, 'Morning 2-4-6', '2021-05-06', '2021-05-22 23:10:25', '2021-05-22 23:10:25'),
-(8, 1, 'Evening 3-5-7', '2021-05-28', '2021-05-25 22:02:54', '2021-05-25 22:02:54');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `class_user`
+-- Cấu trúc bảng cho bảng `class_user`
 --
 
 CREATE TABLE `class_user` (
@@ -92,26 +80,10 @@ CREATE TABLE `class_user` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `class_user`
---
-
-INSERT INTO `class_user` (`id`, `user_id`, `class_id`, `created_at`, `updated_at`) VALUES
-(3, 6, 1, NULL, NULL),
-(4, 6, 5, NULL, NULL),
-(5, 6, 4, NULL, NULL),
-(7, 8, 3, NULL, NULL),
-(8, 8, 1, NULL, NULL),
-(10, 8, 8, NULL, NULL),
-(11, 10, 8, NULL, NULL),
-(12, 6, 8, NULL, NULL),
-(14, 10, 5, NULL, NULL),
-(15, 10, 3, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `courses`
+-- Cấu trúc bảng cho bảng `courses`
 --
 
 CREATE TABLE `courses` (
@@ -127,7 +99,7 @@ CREATE TABLE `courses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `courses`
+-- Đang đổ dữ liệu cho bảng `courses`
 --
 
 INSERT INTO `courses` (`id`, `admin_id`, `name`, `total_time`, `url_image`, `price`, `description`, `created_at`, `updated_at`) VALUES
@@ -140,7 +112,7 @@ INSERT INTO `courses` (`id`, `admin_id`, `name`, `total_time`, `url_image`, `pri
 -- --------------------------------------------------------
 
 --
--- Table structure for table `exams`
+-- Cấu trúc bảng cho bảng `exams`
 --
 
 CREATE TABLE `exams` (
@@ -148,13 +120,13 @@ CREATE TABLE `exams` (
   `course_id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_time` int(11) NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `exams`
+-- Đang đổ dữ liệu cho bảng `exams`
 --
 
 INSERT INTO `exams` (`id`, `course_id`, `name`, `total_time`, `status`, `created_at`, `updated_at`) VALUES
@@ -172,7 +144,7 @@ INSERT INTO `exams` (`id`, `course_id`, `name`, `total_time`, `status`, `created
 -- --------------------------------------------------------
 
 --
--- Table structure for table `failed_jobs`
+-- Cấu trúc bảng cho bảng `failed_jobs`
 --
 
 CREATE TABLE `failed_jobs` (
@@ -187,7 +159,7 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lessons`
+-- Cấu trúc bảng cho bảng `lessons`
 --
 
 CREATE TABLE `lessons` (
@@ -201,7 +173,7 @@ CREATE TABLE `lessons` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `lessons`
+-- Đang đổ dữ liệu cho bảng `lessons`
 --
 
 INSERT INTO `lessons` (`id`, `course_id`, `title`, `description`, `link_video`, `created_at`, `updated_at`) VALUES
@@ -217,7 +189,7 @@ INSERT INTO `lessons` (`id`, `course_id`, `title`, `description`, `link_video`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `migrations`
+-- Cấu trúc bảng cho bảng `migrations`
 --
 
 CREATE TABLE `migrations` (
@@ -227,31 +199,29 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `migrations`
+-- Đang đổ dữ liệu cho bảng `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2021_05_14_014930_create_admins_table', 2),
-(5, '2021_05_14_043325_create_courses_table', 3),
-(6, '2021_05_14_043407_create_exams_table', 3),
-(7, '2021_05_14_043806_create_scores_table', 3),
-(8, '2021_05_14_043934_create_questions_table', 3),
-(9, '2021_05_14_044019_create_question_choices_table', 3),
-(10, '2021_05_14_044103_create_course_user_table', 3),
-(11, '2021_05_14_151804_create_class_rooms_table', 4),
-(12, '2021_05_14_154043_create_class_user_table', 4),
-(13, '2021_05_17_074250_create_note_privates_table', 5),
-(14, '2021_05_17_074259_create_note_generals_table', 5),
-(15, '2021_05_17_162953_create_questions_table', 6),
-(16, '2021_05_20_060754_create_lessons_table', 7);
+(4, '2021_05_14_014930_create_admins_table', 1),
+(5, '2021_05_14_043325_create_courses_table', 1),
+(6, '2021_05_14_043407_create_exams_table', 1),
+(7, '2021_05_14_043806_create_scores_table', 1),
+(8, '2021_05_14_151804_create_class_rooms_table', 1),
+(9, '2021_05_14_154043_create_class_user_table', 1),
+(10, '2021_05_17_074250_create_note_privates_table', 1),
+(11, '2021_05_17_074259_create_note_generals_table', 1),
+(12, '2021_05_17_162953_create_questions_table', 1),
+(13, '2021_05_20_060754_create_lessons_table', 1),
+(14, '2026_04_19_095602_create_registrations_table', 2);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `note_generals`
+-- Cấu trúc bảng cho bảng `note_generals`
 --
 
 CREATE TABLE `note_generals` (
@@ -264,18 +234,10 @@ CREATE TABLE `note_generals` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `note_generals`
---
-
-INSERT INTO `note_generals` (`id`, `class_id`, `admin_id`, `title`, `content`, `created_at`, `updated_at`) VALUES
-(3, 8, 5, 'Learn to prepare for the test next week', 'Learn to prepare for the test next week\r\nChapter1-5', '2021-05-17 05:35:42', '2021-05-25 23:53:51'),
-(4, 5, 5, 'Learn to prepare for the test next month', 'Chapter 1-6', '2021-05-19 07:29:13', '2021-05-26 00:01:28');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `note_privates`
+-- Cấu trúc bảng cho bảng `note_privates`
 --
 
 CREATE TABLE `note_privates` (
@@ -288,19 +250,10 @@ CREATE TABLE `note_privates` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `note_privates`
---
-
-INSERT INTO `note_privates` (`id`, `user_id`, `admin_id`, `title`, `content`, `created_at`, `updated_at`) VALUES
-(1, 6, 5, 'Your result of final exam', 'Well done! You passed the final exam with the mark of 8.7', '2021-05-17 02:23:17', '2021-05-25 23:59:58'),
-(2, 8, 5, 'Your result of final exam', 'Well done! You passed the final exam with the mark of 8.7', '2021-05-19 07:29:40', '2021-05-26 00:01:52'),
-(3, 10, 5, 'Your result of final exam', 'Well done! You passed the final exam with the mark of 8.7', '2021-05-19 07:30:45', '2021-05-26 00:01:56');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `password_resets`
+-- Cấu trúc bảng cho bảng `password_resets`
 --
 
 CREATE TABLE `password_resets` (
@@ -310,7 +263,7 @@ CREATE TABLE `password_resets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `password_resets`
+-- Đang đổ dữ liệu cho bảng `password_resets`
 --
 
 INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
@@ -319,7 +272,7 @@ INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `questions`
+-- Cấu trúc bảng cho bảng `questions`
 --
 
 CREATE TABLE `questions` (
@@ -337,7 +290,7 @@ CREATE TABLE `questions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `questions`
+-- Đang đổ dữ liệu cho bảng `questions`
 --
 
 INSERT INTO `questions` (`id`, `exam_id`, `name`, `answer_1`, `answer_2`, `answer_3`, `answer_4`, `answer_right`, `level`, `created_at`, `updated_at`) VALUES
@@ -390,7 +343,28 @@ INSERT INTO `questions` (`id`, `exam_id`, `name`, `answer_1`, `answer_2`, `answe
 -- --------------------------------------------------------
 
 --
--- Table structure for table `scores`
+-- Cấu trúc bảng cho bảng `registrations`
+--
+
+CREATE TABLE `registrations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `course_id` bigint(20) UNSIGNED NOT NULL,
+  `class_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `fullname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `payment_note` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `scores`
 --
 
 CREATE TABLE `scores` (
@@ -402,17 +376,10 @@ CREATE TABLE `scores` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `scores`
---
-
-INSERT INTO `scores` (`id`, `user_id`, `exam_id`, `score`, `created_at`, `updated_at`) VALUES
-(23, 10, 13, 10.00, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -431,33 +398,35 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`id`, `fullname`, `email`, `phone`, `birthday`, `url_avatar`, `status`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(6, 'Nguyen Van An', 'user1@gmail.com', '0916510664', '1999-03-12', '/storage/uploads/image_avatar/1622006809.png', 'Active', NULL, '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', 'I66pPJQfgXMmvEi0AplbqFMUnhn2fy0D51BI3I3FbD9Fsoc6omD5dzHXy2E0', '2021-05-16 01:51:09', '2021-05-25 22:26:49'),
+(6, 'Nguyen Van An', 'user1@gmail.com', '0916510664', '1999-03-12', '/storage/uploads/image_avatar/1622006809.png', 'Active', NULL, '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', 'XZy2YB4kWmukMwUQDuyhEzbqqDnCRdV5VcxJSyoAFbc5EqFTDrPs6e0fUriC', '2021-05-16 01:51:09', '2021-05-25 22:26:49'),
 (8, 'Huynh Thanh Loi', 'user2@gmail.com', '0839243436', '1999-04-12', '/storage/uploads/image_avatar/1621480983.jpg', 'Active', NULL, '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', 'DH4LM1PZI7cle9rSvAMNSA5xDdS5uTz0mCWPaXaKPh6EnJzTUxT6yAoWIWH0', '2021-05-19 07:24:25', '2021-05-22 05:50:48'),
-(10, 'Tran Phuong Thao', 'user3@gmail.com', '0374682316', '1998-02-05', 'https://ui-avatars.com/api/?name=Tran Phuong Thao', 'Active', NULL, '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', NULL, '2021-05-25 23:13:06', '2021-05-25 23:17:28');
+(10, 'Tran Phuong Thao', 'user3@gmail.com', '0374682316', '1998-02-05', 'https://ui-avatars.com/api/?name=Tran Phuong Thao', 'Active', NULL, '$2y$10$j4PWgcwLImSBYggU6mTh3.6cW2Bcn3tJa6FlNg4CEpfeehTNl.7Bq', NULL, '2021-05-25 23:13:06', '2021-05-25 23:17:28'),
+(12, 'Nguyễn Đình Trí', 'nguyentri09072003@gmail.com', '0362395347', '2003-07-09', '/storage/uploads/image_avatar/1622006809.png', 'Active', NULL, '$2y$10$ZUAf7Rg66feMczRkQui.Ue69lAEyNDSqBBcyFJ7O0XNAmE.g9jM9S', NULL, '2026-05-05 20:07:20', '2026-05-05 20:07:20'),
+(14, 'Nguyễn Văn Trí', 'dinhtri351@gmail.com', '0914187804', '2002-07-09', '/storage/uploads/image_avatar/1622006809.png', 'Active', NULL, '$2y$10$tSU9o3K1oI4.G.09b7jQy.oEVS8qEs3PNEmMa6kS78ObFv3H1lcwm', NULL, '2026-05-05 21:55:45', '2026-05-05 21:55:45');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `admins`
+-- Chỉ mục cho bảng `admins`
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `class_rooms`
+-- Chỉ mục cho bảng `class_rooms`
 --
 ALTER TABLE `class_rooms`
   ADD PRIMARY KEY (`id`),
   ADD KEY `class_rooms_course_id_foreign` (`course_id`);
 
 --
--- Indexes for table `class_user`
+-- Chỉ mục cho bảng `class_user`
 --
 ALTER TABLE `class_user`
   ADD PRIMARY KEY (`id`),
@@ -465,40 +434,40 @@ ALTER TABLE `class_user`
   ADD KEY `class_user_class_id_foreign` (`class_id`);
 
 --
--- Indexes for table `courses`
+-- Chỉ mục cho bảng `courses`
 --
 ALTER TABLE `courses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `courses_admin_id_foreign` (`admin_id`);
 
 --
--- Indexes for table `exams`
+-- Chỉ mục cho bảng `exams`
 --
 ALTER TABLE `exams`
   ADD PRIMARY KEY (`id`),
   ADD KEY `exams_course_id_foreign` (`course_id`);
 
 --
--- Indexes for table `failed_jobs`
+-- Chỉ mục cho bảng `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `lessons`
+-- Chỉ mục cho bảng `lessons`
 --
 ALTER TABLE `lessons`
   ADD PRIMARY KEY (`id`),
   ADD KEY `lessons_course_id_foreign` (`course_id`);
 
 --
--- Indexes for table `migrations`
+-- Chỉ mục cho bảng `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `note_generals`
+-- Chỉ mục cho bảng `note_generals`
 --
 ALTER TABLE `note_generals`
   ADD PRIMARY KEY (`id`),
@@ -506,7 +475,7 @@ ALTER TABLE `note_generals`
   ADD KEY `note_generals_admin_id_foreign` (`admin_id`);
 
 --
--- Indexes for table `note_privates`
+-- Chỉ mục cho bảng `note_privates`
 --
 ALTER TABLE `note_privates`
   ADD PRIMARY KEY (`id`),
@@ -514,20 +483,26 @@ ALTER TABLE `note_privates`
   ADD KEY `note_privates_admin_id_foreign` (`admin_id`);
 
 --
--- Indexes for table `password_resets`
+-- Chỉ mục cho bảng `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
--- Indexes for table `questions`
+-- Chỉ mục cho bảng `questions`
 --
 ALTER TABLE `questions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `questions_exam_id_foreign` (`exam_id`);
 
 --
--- Indexes for table `scores`
+-- Chỉ mục cho bảng `registrations`
+--
+ALTER TABLE `registrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `scores`
 --
 ALTER TABLE `scores`
   ADD PRIMARY KEY (`id`),
@@ -535,151 +510,157 @@ ALTER TABLE `scores`
   ADD KEY `scores_exam_id_foreign` (`exam_id`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `admins`
+-- AUTO_INCREMENT cho bảng `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `class_rooms`
---
-ALTER TABLE `class_rooms`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `class_user`
+-- AUTO_INCREMENT cho bảng `class_rooms`
+--
+ALTER TABLE `class_rooms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT cho bảng `class_user`
 --
 ALTER TABLE `class_user`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `courses`
+-- AUTO_INCREMENT cho bảng `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `exams`
+-- AUTO_INCREMENT cho bảng `exams`
 --
 ALTER TABLE `exams`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `failed_jobs`
+-- AUTO_INCREMENT cho bảng `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `lessons`
+-- AUTO_INCREMENT cho bảng `lessons`
 --
 ALTER TABLE `lessons`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `migrations`
+-- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `note_generals`
+-- AUTO_INCREMENT cho bảng `note_generals`
 --
 ALTER TABLE `note_generals`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `note_privates`
---
-ALTER TABLE `note_privates`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `questions`
+-- AUTO_INCREMENT cho bảng `note_privates`
+--
+ALTER TABLE `note_privates`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT cho bảng `questions`
 --
 ALTER TABLE `questions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
--- AUTO_INCREMENT for table `scores`
+-- AUTO_INCREMENT cho bảng `registrations`
+--
+ALTER TABLE `registrations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `scores`
 --
 ALTER TABLE `scores`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `class_rooms`
+-- Các ràng buộc cho bảng `class_rooms`
 --
 ALTER TABLE `class_rooms`
   ADD CONSTRAINT `class_rooms_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`);
 
 --
--- Constraints for table `class_user`
+-- Các ràng buộc cho bảng `class_user`
 --
 ALTER TABLE `class_user`
   ADD CONSTRAINT `class_user_class_id_foreign` FOREIGN KEY (`class_id`) REFERENCES `class_rooms` (`id`),
   ADD CONSTRAINT `class_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `courses`
+-- Các ràng buộc cho bảng `courses`
 --
 ALTER TABLE `courses`
   ADD CONSTRAINT `courses_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`);
 
 --
--- Constraints for table `exams`
+-- Các ràng buộc cho bảng `exams`
 --
 ALTER TABLE `exams`
   ADD CONSTRAINT `exams_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`);
 
 --
--- Constraints for table `lessons`
+-- Các ràng buộc cho bảng `lessons`
 --
 ALTER TABLE `lessons`
   ADD CONSTRAINT `lessons_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`);
 
 --
--- Constraints for table `note_generals`
+-- Các ràng buộc cho bảng `note_generals`
 --
 ALTER TABLE `note_generals`
   ADD CONSTRAINT `note_generals_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`),
   ADD CONSTRAINT `note_generals_class_id_foreign` FOREIGN KEY (`class_id`) REFERENCES `class_rooms` (`id`);
 
 --
--- Constraints for table `note_privates`
+-- Các ràng buộc cho bảng `note_privates`
 --
 ALTER TABLE `note_privates`
   ADD CONSTRAINT `note_privates_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`),
   ADD CONSTRAINT `note_privates_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `questions`
+-- Các ràng buộc cho bảng `questions`
 --
 ALTER TABLE `questions`
   ADD CONSTRAINT `questions_exam_id_foreign` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`);
 
 --
--- Constraints for table `scores`
+-- Các ràng buộc cho bảng `scores`
 --
 ALTER TABLE `scores`
   ADD CONSTRAINT `scores_exam_id_foreign` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`),

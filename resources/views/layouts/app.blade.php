@@ -226,7 +226,7 @@
                 </div>
             </div>
             <div class="text-center p-3" style="background-color: #008657; font-size: 1.5rem; color: #fff;">
-                © 2021 Copyright:
+                © 2026 Copyright:
                 <a class="footer-link" href="#" style="color: #fff;">HDTC Team</a>
             </div>
         </footer>

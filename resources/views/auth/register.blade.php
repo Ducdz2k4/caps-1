@@ -1,88 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration - Course Online</title>
-    <style>
-        
-        body { font-family: sans-serif; background-color: #f4f4f4; padding: 20px; }
-        .register-container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input[type="text"], input[type="email"], input[type="date"], select {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
-        }
-        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;}
-        button:hover { background-color: #0056b3; }
-        .error-message { color: red; font-size: 14px; margin-top: 5px; }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
 
-<div class="register-container">
-    <h2>REGISTRATION</h2>
+@section('content')
+<div class="form-container">
+    <div class="form-heading">
+        <a class="title-link">
+            <i class="fas fa-angle-double-down"></i>
+            <h3 class="title">Register an Account</h3>
+        </a>
+    </div>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-    @if ($errors->any())
-        <div style="background: #ffdddd; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-            <ul style="color: red; margin: 0; padding-left: 20px;">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('register.submit') }}" method="POST">
-        @csrf <div class="form-group">
-            <label>Choose a course:</label>
-            <select name="course_id" required>
-                <option value="">-- Select a course --</option>
-                @foreach($courses as $course)
-                    <option value="{{ $course->id }}">{{ $course->name }}</option>
-                @endforeach
-            </select>
+        <div class="form--group">
+            <label for="fullname" class="form__label">Full Name:</label>
+            <div class="form-input">
+                <i class="fas fa-id-card" id="icon-custom"></i>
+                <input id="fullname" type="text" class="form__input @error('fullname') is-invalid @enderror" name="fullname" value="{{ old('fullname') }}" required autocomplete="name" autofocus>
+                @error('fullname')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Choose a schedule:</label>
-            <select name="class_id" required>
-                <option value="">-- Select a schedule --</option>
-                @foreach($classrooms as $class)
-                    <option value="{{ $class->id }}">{{ $class->schedule }} (Start: {{ $class->start }})</option>
-                @endforeach
-            </select>
+  
+        <div class="form--group">
+            <label for="email" class="form__label">Email:</label>
+            <div class="form-input">
+                <i class="fas fa-envelope" id="icon-custom"></i>
+                <input id="email" type="email" class="form__input @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                @error('email')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>First and last name:</label>
-            <input type="text" name="fullname" value="{{ old('fullname') }}" required placeholder="Enter your full name">
+       
+        <div class="form--group">
+            <label for="phone" class="form__label">Phone:</label>
+            <div class="form-input">
+                <i class="fas fa-phone" id="icon-custom"></i>
+                <input id="phone" type="text" class="form__input @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required>
+                @error('phone')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Date of birth:</label>
-            <input type="date" name="birthday" value="{{ old('birthday') }}" required>
+        <div class="form--group">
+            <label for="birthday" class="form__label">Birthday:</label>
+            <div class="form-input">
+                <i class="fas fa-calendar-alt" id="icon-custom"></i>
+                <input id="birthday" type="date" class="form__input @error('birthday') is-invalid @enderror" name="birthday" value="{{ old('birthday') }}" required>
+                @error('birthday')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Email:</label>
-            <input type="email" name="email" value="{{ old('email') }}" required placeholder="Enter your email">
+      
+        <div class="form--group">
+            <label for="password" class="form__label">Password:</label>
+            <div class="form-input">
+                <i class="fas fa-lock" id="icon-custom"></i>
+                <input id="password" type="password" class="form__input @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                @error('password')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Address:</label>
-            <input type="text" name="address" value="{{ old('address') }}" placeholder="Enter your address">
+      
+        <div class="form--group">
+            <label for="password-confirm" class="form__label">Confirm Password:</label>
+            <div class="form-input">
+                <i class="fas fa-lock" id="icon-custom"></i>
+                <input id="password-confirm" type="password" class="form__input" name="password_confirmation" required autocomplete="new-password">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Phone:</label>
-            <input type="text" name="phone" value="{{ old('phone') }}" required placeholder="Enter your phone number">
+        <div class="form-button">
+            <button type="submit" class="btn-default btn--success">Register</button>
+            <a href="{{ route('login') }}" class="btn-default btn--success ml-3 text-light">Back to Login</a>
         </div>
-
-        <button type="submit">REGISTRATION</button>
     </form>
 </div>
-
-</body>
-</html>
+@endsection

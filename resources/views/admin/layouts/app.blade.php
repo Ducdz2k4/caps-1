@@ -46,6 +46,7 @@
                 <a class="nav-link" href="{{ route('admin.home') }}" style="text-align: center ">
 
                     <span>Dashboard</span></a>
+                    
             </li>
             <hr class="sidebar-divider">
             <!-- Nav Item - Pages Collapse Menu -->
@@ -55,6 +56,10 @@
                 <a class="nav-link collapsed" href="{{ route('admin.course.index') }}">
                     <i class="fas fa-graduation-cap  fa-sm fa-fw mr-2 text-gray-400"></i>
                     <span>Course Management</span>
+                    
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/registrations">
+                    <span>Registrations</span>
                 </a>
 
             </li>
@@ -194,7 +199,7 @@
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2021</span>
+                            <span>Copyright &copy; Your Website 2026</span>
                         </div>
                     </div>
                 </footer>

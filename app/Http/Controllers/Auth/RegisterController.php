@@ -7,62 +7,56 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 
 class RegisterController extends Controller
 {
     use RegistersUsers;
 
+    /**
+     * Where to redirect users after registration.
+     *
+     * @var string
+     */
     protected $redirectTo = '/login'; 
 
-    public function __construct()
+    public function construct()
     {
         $this->middleware('guest');
     }
 
-   
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
-    }
-
+    
+    
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'fullname' => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone'    => ['required', 'numeric', 'digits_between:10,11'], 
+            'phone'    => ['required', 'string'],
             'birthday' => ['required', 'date'],
-            'password' => ['required', 'string', 'min:6'],
-        ], [
-            'required' => 'You must fill in the information in this box', 
-            'email'    => 'Invalid data: @gmail.com', 
-            'numeric'  => 'Please enter the correct phone number format', 
+            'password' => ['required', 'string', 'min:8', 'confirmed'], 
         ]);
     }
 
-    
+   
     protected function create(array $data)
     {
-        return User::create([
-            'fullname'   => $data['fullname'],
-            'email'      => $data['email'],
-            'phone'      => $data['phone'],
-            'birthday'   => $data['birthday'],
-            'password'   => Hash::make($data['password']),
-            'status'     => 'Pending', // Chờ admin duyệt theo kịch bản Test Case
+ 
+        $newUser = User::create([
+            'fullname' => $data['fullname'],
+            'email'    => $data['email'],
+            'phone'    => $data['phone'],
+            'birthday' => $data['birthday'],
+            'password' => Hash::make($data['password']),
             'url_avatar' => 'https://ui-avatars.com/api/?name=' . urlencode($data['fullname']),
+            'status'   => 'Active', 
         ]);
-    }
 
-  
-    public function register(Request $request)
-    {
-        $this->validator($request->all())->validate();
-
-        $this->create($request->all());
+       
+        Mail::to($newUser->email)->send(new WelcomeMail($newUser));
 
         
-        return redirect()->route('login')->with('success', 'Successful registration, Your account will be approved by the administrator !');
+        return $newUser;
     }
 }

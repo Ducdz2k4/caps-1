@@ -7,6 +7,7 @@ use App\Admin;
 use App\Course;
 use App\Lesson;
 use App\ClassRoom;
+use App\Registration; // 🔥 thêm dòng này
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,6 +27,22 @@ class HomeController extends Controller
 
         $managers = Admin::where('role','Manager')->get();
 
-        return view('admin.home',compact('users','courses','classes','lessons','admins','managers'));
+        $registrations = Registration::all();
+
+        $paid = Registration::where('payment_status','paid')->get();
+        
+        $pending = Registration::where('payment_status','pending')->get();
+
+        return view('admin.home', compact(
+            'users',
+            'courses',
+            'classes',
+            'lessons',
+            'admins',
+            'managers',
+            'registrations',
+            'paid',
+            'pending'
+        ));
     }
 }

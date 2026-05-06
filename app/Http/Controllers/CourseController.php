@@ -10,17 +10,20 @@ use Illuminate\Support\Facades\Auth;
 class CourseController extends Controller
 {
 
-    public function create(Request $request,Course $course)
-    {
-        $data = $request->validate([
-            'course' => 'required',
-            'class' => 'required',
-            'fullname' => 'required|max:255',
-            'birthday' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email|max:255|unique:users',
-        ]);
+public function create(Request $request, Course $course)
+{
+    $data = $request->validate([
+        'course' => 'required',
+        'class' => 'required',
+        'fullname' => 'required|max:255',
+        'birthday' => 'required',
+        'phone' => 'required',
+        'email' => 'required|email|max:255',
+    ]);
 
+    $user = User::where('email', $data['email'])->first();
+
+    if (!$user) {
         $user = User::create([
             'fullname' => $data['fullname'],
             'email' => $data['email'],
@@ -30,13 +33,25 @@ class CourseController extends Controller
             'password' => '',
             'status' => 'Waiting'
         ]);
-
-        $user->classes()->attach($data['class']);
-
-        $request->session()->flash('message', 'Successful registration, Your account will be approved by the administrator !');
-
-        return redirect()->route('register-course',$course->id);
     }
+
+    $user->classes()->attach($data['class']);
+
+    // 🔥 thêm phần payment
+    $registration = \App\Registration::create([
+        'course_id' => $course->id,
+        'class_id' => $data['class'],
+        'fullname' => $data['fullname'],
+        'birthday' => $data['birthday'],
+        'email' => $data['email'],
+        'phone' => $data['phone'],
+        'amount' => $course->price ?? 1000000,
+        'payment_status' => 'pending',
+    ]);
+
+    // 🔥 chuyển sang payment
+    return redirect('/payment/' . $registration->id);
+}
 
     public function showFormRegisterCourse(Course $course)
     {
@@ -72,6 +87,7 @@ class CourseController extends Controller
         
         $classStudents = Auth::guard('web')->user()->classes;
 
+
         foreach($classStudents as $class)
         {
             if($class->id == $data['class'])
@@ -87,12 +103,5 @@ class CourseController extends Controller
         $request->session()->flash('message', 'Successful registration !');
 
         return redirect()->route('register-course-member',$course->id);
-    }
-
-    // 🔥 THÊM ĐOẠN NÀY
-    public function index()
-    {
-        $courses = Course::all();
-        return view('courses.course', compact('courses'));
     }
 }

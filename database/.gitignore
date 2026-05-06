@@ -1,4 +1,2 @@
 *.sqlite
 *.sqlite-journal
-node_modules/
-*.pem

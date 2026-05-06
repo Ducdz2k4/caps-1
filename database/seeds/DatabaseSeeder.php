@@ -9,11 +9,8 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    // ...existing code...
     public function run()
     {
         $this->call(AdminTableSeeder::class);
-        
     }
-
 }
