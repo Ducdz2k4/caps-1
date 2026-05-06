@@ -33,7 +33,7 @@ class HomeController extends Controller
             }
         }
 
-        $percent_exam = number_format(($exam_done/$total_exam)*100, 2);
+        $percent_exam = $total_exam > 0 ? number_format(($exam_done/$total_exam)*100, 2) : 0;
 
         return view('dashboard-user.home',compact('note_privates','note_generals','percent_exam'));
     }

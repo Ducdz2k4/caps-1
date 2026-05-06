@@ -41,17 +41,25 @@
                 <strong class="text-danger">{{ $error }}</strong>
             </span>
         @endif
+        
+        
         <div class="form-button">
-            <button  class="btn-default btn--success">Login</button>
+            <button class="btn-default btn--success">Login</button>
             
             @if (Route::has('password.request'))
              <a href="{{ route('password.request') }}" class="btn-default btn--success ml-3 text-light">
                 {{ __('Forgot Your Password?') }}
              </a>
             @endif
+
+            
+            @if (Route::has('register'))
+             <a href="{{ route('register') }}" class="btn-default btn--success ml-3 text-light">
+                Register
+             </a>
+            @endif
         </div>
         
-
     </form>
    
 </div>

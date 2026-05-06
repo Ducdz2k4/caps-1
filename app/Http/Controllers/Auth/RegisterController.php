@@ -3,25 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
     /**
@@ -29,40 +19,44 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/registerCourse';
+    protected $redirectTo = '/login'; 
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
+    
+    
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'course' => 'required',
-            'class' => 'required',
-            'fullname' => 'required|max:255',
-            'birthday' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email|max:255|unique:users',
+            'fullname' => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone'    => ['required', 'string'],
+            'birthday' => ['required', 'date'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], 
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
+   
+    protected function create(array $data)
+    {
+ 
+        $newUser = User::create([
+            'fullname' => $data['fullname'],
+            'email'    => $data['email'],
+            'phone'    => $data['phone'],
+            'birthday' => $data['birthday'],
+            'password' => Hash::make($data['password']),
+            'url_avatar' => 'https://ui-avatars.com/api/?name=' . urlencode($data['fullname']),
+            'status'   => 'Active', 
+        ]);
+
+       
+        Mail::to($newUser->email)->send(new WelcomeMail($newUser));
+
+        
+        return $newUser;
+    }
 }

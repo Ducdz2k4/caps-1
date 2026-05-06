@@ -50,11 +50,11 @@ class HomeController extends Controller
                 'data' => 'Goodbye see you later <3'
             ], 200);
         }
-        else
+        else 
         {
             return response()->json([
                 'type' => 'text',
-                'data' => 'Hi, I dont understand, please type /help'
+                'data' => 'Hi, I am CourseBot 2026. I dont understand, please type /help'
             ], 200);
         }
     }
