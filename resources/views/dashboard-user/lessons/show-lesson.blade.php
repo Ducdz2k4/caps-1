@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="course-container">
+
+    <!-- Nút quay lại -->
     <div class="learn-btn">
         <div class="container-fluid">
             <div class="row ">
@@ -14,6 +16,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Thông tin course -->
     <div class="info-table-course">
         <table class="table table-st">
             <thead style="background-color: #4268D6; color: #fff;">
@@ -30,6 +34,8 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Mô tả -->
     <div class="notification-success text-align">
         <div class="alert-noti">
             <h3>
@@ -39,11 +45,27 @@
             </h3>
         </div>
     </div>
+
+    <!-- Video -->
     <div class="info-table-course">
         {!! $lesson->link_video !!}
     </div>
-    <div class="learn-desc">
 
+    <!-- 🔥 PHẦN HIỂN THỊ CODE -->
+    <div class="learn-desc mt-4">
+        <h4>Example Code</h4>
+
+        <pre id="lesson-code" style="
+            background:#1e1e2f;
+            color:#ffffff;
+            padding:15px;
+            border-radius:10px;
+            overflow:auto;
+            font-family: monospace;
+            font-size:14px;
+        ">
+{!! nl2br(e($lesson->code_example)) !!}
+        </pre>
     </div>
 
 </div>

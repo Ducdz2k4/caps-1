@@ -1,58 +1,227 @@
 @extends('layouts.board')
 
 @section('content')
-<div class="course-container">
-    <div class="course-heading">
-        <a href="#" class="info-title" style=" font-size: 20px;">
-            <i class="fas fa-graduation-cap fa-lg fa-fw mr-2 text-gray-400"></i>
-            <h5 class="title">Hello: {{ Auth::guard('web')->user()->fullname }}</h5>
-        </a>
-    </div>
-    <div class="info-table-course">
-        <div id="minute" style="display: none">{{ $exam->total_time }}</div>
-        <table class="table table-st">
-            <thead style="background-color: #4268D6; color: #fff;">
-                <tr>
-                    <th>Course name</th>
-                    <th>Exam name</th>
-                    <th>Total time</th>
 
+<style>
+    body {
+        background: #f3f4f6;
+    }
+
+    .course-container {
+        max-width: 900px;
+        margin: 30px auto;
+    }
+
+    .card-box {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        text-align: center;
+    }
+
+    .title {
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    /* ===== FIX TABLE ===== */
+    .exam-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    .exam-table th {
+        width: 33.33%;
+        padding: 14px;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
+        color: #fff;
+    }
+
+    .exam-table td {
+        padding: 14px;
+        text-align: center;
+        background: #f9fafb;
+    }
+
+    .exam-table tr {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .btn-start {
+        display: block;
+        margin: 20px auto;
+        background: #16a34a;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 8px;
+    }
+
+    .btn-submit {
+        margin-top: 20px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-weight: 600;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #timer {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        color: #dc2626;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="course-container">
+
+    <!-- INFO -->
+    <div class="card-box">
+        <h4 class="title">📝 Bài thi</h4>
+
+        <div id="minute" style="display:none">{{ $exam->total_time }}</div>
+
+        <!-- FIX TABLE -->
+        <table class="exam-table">
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Exam</th>
+                    <th>Time</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>{{ $exam->course->name }}</td>
                     <td>{{ $exam->name }}</td>
-                    <th id="time">{{ $exam->total_time }} Minute</th>
+                    <td>{{ $exam->total_time }} phút</td>
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="star-quiz-btn">
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form id="formSelectLevel" action="GET" data-id="{{ $exam->id }}">
-                @csrf
-                <div class="form-group">
-                    <label for="level" style="font-weight: bold;">Level: </label>
-                    <select name="level" id="level" style="margin: auto" class="form-control">
-                        <option value="Easy" selected="selected">Easy</option>
-                        <option value="Medium" >Medium</option>
-                        <option value="Hard">Hard</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary" style= "margin: 0 45%;">Start</button>
-            </form>
-        </div>
+
+        <div id="timer">⏰ Đang tải...</div>
     </div>
 
-    <form id="formQuiz" method="POST" action="{{ route('student.exam.quiz.check',$exam->id) }}">
-        @csrf
-        <div id="questions" class="multiple-container">
+    <!-- SELECT LEVEL -->
+    <div class="card-box">
+        <form id="formSelectLevel" data-id="{{ $exam->id }}">
+            @csrf
+            <label><b>Chọn level:</b></label>
+            <select name="level" id="level" class="form-control">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
 
-        </div>
-    </form>
+            <button type="submit" class="btn-start">🚀 Bắt đầu làm bài</button>
+        </form>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="card-box">
+        <form id="formQuiz" method="POST" action="{{ route('student.exam.quiz.check',$exam->id) }}" onsubmit="return checkSubmit()">
+            @csrf
+
+            <div id="questions"></div>
+
+         
+        </form>
+    </div>
 
 </div>
+
+<script>
+    let totalTime = parseInt(document.getElementById('minute').innerText) * 60;
+    let timeLeft = totalTime;
+    let minSubmitTime = totalTime * (2/3);
+
+    let startTime = 0;
+    let warningCount = 0;
+    let isLocked = false;
+
+    let isStarted = false; 
+    let timer; 
+
+
+    // TIMER
+ function startTimer() {
+    timer = setInterval(() => {
+
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+
+        document.getElementById("timer").innerHTML =
+            "⏰ " + m + ":" + (s < 10 ? "0" : "") + s;
+
+        timeLeft--;
+
+        if (timeLeft < 0) {
+            clearInterval(timer);
+            alert("⏰ Hết giờ! Tự động nộp bài");
+            document.getElementById("formQuiz").submit();
+        }
+
+    }, 1000);
+}
+
+    // CHẶN TAB
+    document.addEventListener("visibilitychange", function () {
+        if (!isStarted) return;
+        if (document.hidden) {
+            warningCount++;
+
+            if (warningCount <= 2) {
+                alert("⚠️ Không được chuyển tab!\nCòn " + (3 - warningCount) + " lần!");
+            } else {
+                alert("❌ Bạn đã bị khóa bài thi!");
+                lockExam();
+            }
+        }
+    });
+
+    function lockExam() {
+        isLocked = true;
+
+        document.querySelectorAll("input, button, select").forEach(el => {
+            el.disabled = true;
+        });
+
+        document.body.innerHTML += "<h2 style='color:red;text-align:center'>❌ Bài thi đã bị khóa</h2>";
+    }
+
+    function checkSubmit() {
+        let now = Date.now();
+        let timePassed = (now - startTime) / 1000;
+
+        if (isLocked) {
+            alert("❌ Bài đã bị khóa!");
+            return false;
+        }
+
+        if (timePassed < minSubmitTime) {
+            let remain = Math.floor(minSubmitTime - timePassed);
+            alert("⏳ Chưa đủ thời gian!\nCòn " + remain + " giây nữa!");
+            return false;
+        }
+
+        return true;
+    }
+
+  window.onbeforeunload = function () {
+    if (isStarted) {
+        return "Bạn đang làm bài thi!";
+    }
+};
+</script>
+
 @endsection

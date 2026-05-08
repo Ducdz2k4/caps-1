@@ -35,9 +35,15 @@ public function create(Request $request, Course $course)
         ]);
     }
 
-    $user->classes()->attach($data['class']);
+    //  nếu đã đăng ký lớp rồi thì báo lỗi
+    if ($user->classes()->where('class_id', $data['class'])->exists()) {
+        return redirect()->back()->with('message', 'Bạn đã đăng ký lớp này rồi!');
+    }
 
-    // 🔥 thêm phần payment
+    //  attach class không bị lỗi trùng
+    $user->classes()->syncWithoutDetaching([$data['class']]);
+
+    // tạo registration
     $registration = \App\Registration::create([
         'course_id' => $course->id,
         'class_id' => $data['class'],
@@ -49,7 +55,7 @@ public function create(Request $request, Course $course)
         'payment_status' => 'pending',
     ]);
 
-    // 🔥 chuyển sang payment
+    // chuyển sang payment
     return redirect('/payment/' . $registration->id);
 }
 

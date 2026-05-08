@@ -152,7 +152,7 @@
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2021</span>
+                            <span>Copyright &copy; Your Website 2026</span>
                         </div>
                     </div>
                 </footer>
@@ -278,6 +278,36 @@
             
         </script>
 
-</body>
+<!-- 🔒 CHẶN COPY CODE -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const code = document.getElementById("lesson-code");
 
+    if (code) {
+
+        // ❌ chặn bôi đen
+        code.style.userSelect = "none";
+
+        // ❌ chặn copy
+        code.addEventListener("copy", function(e) {
+            e.preventDefault();
+        });
+
+        // ❌ chặn Ctrl + C
+        code.addEventListener("keydown", function(e) {
+            if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+                e.preventDefault();
+            }
+        });
+
+        // ❌ chặn chuột phải
+        code.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+        });
+
+    }
+});
+</script>
+
+</body>
 </html>

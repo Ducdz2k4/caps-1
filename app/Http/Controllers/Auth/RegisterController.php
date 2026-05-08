@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/registerCourse';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -48,16 +48,28 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'course' => 'required',
-            'class' => 'required',
-            'fullname' => 'required|max:255',
-            'birthday' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email|max:255|unique:users',
-        ]);
-    }
+{
+    return Validator::make($data, [
+        'fullname' => 'required|string|max:255',
+        'birthday' => 'required|date',
+        'phone' => 'required|string|max:20',
+        'email' => 'required|string|email|max:255|unique:users',
+
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+}
+    protected function create(array $data)
+{
+    return User::create([
+        'fullname' => $data['fullname'],
+        'email' => $data['email'],
+        'phone' => $data['phone'],
+        'birthday' => $data['birthday'],
+        'password' => Hash::make($data['password']),
+        'status' => 'Waiting',
+        'url_avatar' => 'https://ui-avatars.com/api/?name=' . urlencode($data['fullname']),
+    ]);
+}
 
     /**
      * Create a new user instance after a valid registration.
