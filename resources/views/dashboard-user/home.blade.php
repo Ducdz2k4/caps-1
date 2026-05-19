@@ -1,130 +1,167 @@
 @extends('layouts.board')
 
 @section('content')
+
+<style>
+    .dashboard-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .dashboard-card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        transition: all 0.35s ease;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 35px rgba(0,0,0,0.12);
+    }
+
+    .card-primary {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+    }
+
+    .card-success {
+        background: linear-gradient(135deg, #10b981, #34d399);
+        color: white;
+    }
+
+    .card-info {
+        background: linear-gradient(135deg, #06b6d4, #38bdf8);
+        color: white;
+    }
+
+    .card-warning {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        color: white;
+    }
+
+    .card-label {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        opacity: 0.9;
+    }
+
+    .card-value {
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .course-card {
+        border-radius: 18px;
+        border: none;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .progress {
+        height: 14px;
+        border-radius: 10px;
+        background: #e5e7eb;
+    }
+
+    .progress-bar {
+        border-radius: 10px;
+    }
+
+    .course-title {
+        font-weight: 600;
+        color: #374151;
+    }
+</style>
+
 <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    <div class="mb-4">
+        <h1 class="dashboard-title">Dashboard</h1>
     </div>
 
-    <!-- Content Row -->
     <div class="row">
 
-        <!-- Earnings (Monthly) Card Example -->
+        <!-- General Notification -->
         <div class="col-xl-3 col-md-6 mb-4">
             <a class="text-decoration-none" href="{{ route('student.notification.index') }}">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    General Notification</div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-500">
-                                    {{ $note_generals->count() }} notifications
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="card dashboard-card card-primary p-4">
+                    <div class="card-label">General Notification</div>
+                    <div class="card-value mt-3">{{ $note_generals->count() }}</div>
+                    <small>Notifications</small>
                 </div>
             </a>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
+        <!-- Specific Notification -->
         <div class="col-xl-3 col-md-6 mb-4">
             <a class="text-decoration-none" href="{{ route('student.notification.index') }}">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col-11 mr-4">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Specific Notification</div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-500">{{ $note_privates->count() }}
-                                    notifications</div>
-                            </div>
-
-                        </div>
-                    </div>
+                <div class="card dashboard-card card-success p-4">
+                    <div class="card-label">Specific Notification</div>
+                    <div class="card-value mt-3">{{ $note_privates->count() }}</div>
+                    <small>Notifications</small>
                 </div>
             </a>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
+        <!-- Exams -->
         <div class="col-xl-3 col-md-6 mb-4">
             <a class="text-decoration-none" href="{{ route('student.exam.index') }}">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Exam
-                                </div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $percent_exam }}%
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="progress progress-sm mr-2">
-                                            <div class="progress-bar bg-info" role="progressbar"
-                                                style="width: {{ $percent_exam }}%" aria-valuenow="50" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
+                <div class="card dashboard-card card-info p-4">
+                    <div class="card-label">Total Exam</div>
+                    <div class="card-value mt-3">{{ $percent_exam }}%</div>
+                    <div class="progress mt-3">
+                        <div class="progress-bar bg-light" style="width: {{ $percent_exam }}%"></div>
                     </div>
                 </div>
             </a>
         </div>
 
-        <!-- Pending Requests Card Example -->
+        <!-- Classes -->
         <div class="col-xl-3 col-md-6 mb-4">
             <a class="text-decoration-none" href="{{ route('student.class.index') }}">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Classes</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ Auth::guard('web')->user()->classes->count() }}</div>
-                            </div>
-                        </div>
+                <div class="card dashboard-card card-warning p-4">
+                    <div class="card-label">Classes</div>
+                    <div class="card-value mt-3">
+                        {{ Auth::guard('web')->user()->classes->count() }}
                     </div>
+                    <small>Enrolled</small>
                 </div>
             </a>
         </div>
+
     </div>
 
-    <!-- Content Row -->
-    <div class="row">
-        <!-- Content Column -->
-        <div class="col-lg-12 mb-4">
+    <!-- Courses -->
+    <div class="card course-card mt-4">
+        <div class="card-header bg-white border-0 py-4">
+            <h4 class="mb-0 font-weight-bold text-primary">Courses Progress</h4>
+        </div>
 
-            <!-- Project Card Example -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Courses</h6>
-                </div>
-                <div class="card-body">
-                    @foreach (Auth::guard('web')->user()->classes as $class)
-                    <h4 class="small font-weight-bold">{{ $class->course->name }} <span
-                            class="float-right">{{ $class->percentExamComplete() }}%</span></h4>
-                    <div class="progress mb-4">
-                        <div class="progress-bar bg-danger" role="progressbar"
-                            style="width: {{ $class->percentExamComplete() }}%"
-                            aria-valuenow="{{ $class->percentExamComplete() }}" aria-valuemin="0" aria-valuemax="100">
+        <div class="card-body">
+
+            @foreach (Auth::guard('web')->user()->classes as $class)
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="course-title">{{ $class->course->name }}</span>
+                        <strong>{{ $class->percentExamComplete() }}%</strong>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar bg-danger"
+                            style="width: {{ $class->percentExamComplete() }}%">
                         </div>
                     </div>
-                    @endforeach
                 </div>
-            </div>
+
+            @endforeach
+
         </div>
     </div>
 
 </div>
+
 @endsection

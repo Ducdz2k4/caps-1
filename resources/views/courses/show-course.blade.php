@@ -10,7 +10,7 @@
         </div>
         
         <div class="title-heading ">
-            <a href="@auth {{ route('register-course-member',$course->id) }} @else {{ route('register-course',$course->id) }} @endauth" class="title-heading-a " >
+            <a href="@auth {{ route('register-course',$course->id) }} @else {{ route('register-course',$course->id) }} @endauth" class="title-heading-a " >
                 <i class="fas fa-book-open m-right fa-sm fa-fw mr-2 text-gray-400"></i> Register now</a>
         </div>
 

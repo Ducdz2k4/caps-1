@@ -13,7 +13,7 @@
 
         <!-- USERS -->
         <div class="col-xl-3 col-md-6 mb-4 text-align-center">
-            <a href="/admin/users" style="text-decoration:none;">
+            <a href="/admin/students" style="text-decoration:none;">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body text-center">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">

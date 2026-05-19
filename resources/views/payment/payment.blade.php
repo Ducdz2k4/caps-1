@@ -39,17 +39,26 @@
         <h3 style="font-size:24px;">Quét mã QR để thanh toán</h3>
 
         <img 
-            src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=PAYMENT_{{ $registration->id }}"
-            style="margin:25px 0;"
-        />
+            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ urlencode('http://172.20.10.2:8000/mobile-pay/'.$registration->id) }}" 
+            alt="QR Code Payment"
+        >
 
-        {{-- BUTTON --}}
-        <form method="POST" action="{{ url('/payment/confirm/'.$registration->id) }}">
-            @csrf
-            <button style="padding:14px 30px; font-size:16px; background:green; color:white; border:none; border-radius:6px;">
-                Tôi đã thanh toán
-            </button>
-        </form>
+        {{-- BUTTONS --}}
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+            <form method="POST" action="{{ url('/payment/confirm/'.$registration->id) }}">
+                @csrf
+                <button style="padding:14px 30px; font-size:16px; background:green; color:white; border:none; border-radius:6px; cursor:pointer;">
+                    Tôi đã chuyển khoản
+                </button>
+            </form>
+
+            <form method="POST" action="{{ route('payment.vnpay', $registration->id) }}">
+                @csrf
+                <button style="padding:14px 30px; font-size:16px; background:#005baa; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">
+                    Thanh toán qua VNPAY
+                </button>
+            </form>
+        </div>
 
         {{-- STATUS --}}
         @if($registration->payment_status == 'paid')
@@ -60,19 +69,20 @@
 
     </div>
     <script>
-    let isPaid = "{{ $registration->payment_status }}" === "paid";
+let isPaid = "{{ $registration->payment_status }}" === "paid";
 
-    if (!isPaid) {
-        setTimeout(function() {
-            fetch("{{ url('/payment/' . $registration->id . '/confirm') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+if (!isPaid) {
+    let interval = setInterval(function() {
+        fetch("{{ route('payment.status', $registration->id) }}")
+            .then(res => res.json())
+            .then(data => {
+                if (data.payment_status === "paid") {
+                    clearInterval(interval); // dừng check
+                    location.reload();       // reload 1 lần
                 }
-            }).then(() => location.reload());
-        }, 5000);
-    }
+            });
+    }, 2000);
+}
 </script>
-
 </div>
 @endsection

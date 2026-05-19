@@ -35,9 +35,27 @@ public function create(Request $request, Course $course)
         ]);
     }
 
-    $user->classes()->attach($data['class']);
+        // nếu đã có registration của lớp này
+    $existingRegistration = \App\Registration::where('email', $data['email'])
+        ->where('course_id', $course->id)
+        ->where('class_id', $data['class'])
+        ->orderBy('id', 'desc')
+        ->first();
 
-    // 🔥 thêm phần payment
+    if ($existingRegistration) {
+        if ($existingRegistration->payment_status == 'paid') {
+            return redirect()->back()->with('message', 'Bạn đã đăng ký và thanh toán lớp này rồi!');
+        } else {
+            // chưa thanh toán -> quay lại trang payment
+            return redirect('/payment/' . $existingRegistration->id)
+                ->with('message', 'Bạn đã đăng ký lớp này nhưng chưa thanh toán. Vui lòng thanh toán để hoàn tất.');
+        }
+    }
+
+    //  attach class không bị lỗi trùng
+    $user->classes()->syncWithoutDetaching([$data['class']]);
+
+    // tạo registration
     $registration = \App\Registration::create([
         'course_id' => $course->id,
         'class_id' => $data['class'],
@@ -49,7 +67,7 @@ public function create(Request $request, Course $course)
         'payment_status' => 'pending',
     ]);
 
-    // 🔥 chuyển sang payment
+    // chuyển sang payment
     return redirect('/payment/' . $registration->id);
 }
 
