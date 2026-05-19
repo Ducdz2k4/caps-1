@@ -20,6 +20,11 @@ class Registration extends Model
 
     public function course()
     {
-        return $this->belongsTo(\App\Course::class);
+        return $this->belongsTo(\App\Course::class, 'course_id');
+    }
+
+    public function classRoom()
+    {
+        return $this->belongsTo(\App\ClassRoom::class, 'class_id');
     }
 }

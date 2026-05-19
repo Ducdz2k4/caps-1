@@ -1,18 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GeminiController;
+
+Route::post('/chatbot/gemini', [GeminiController::class, 'chat']);
 
 // Home
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/chatbot', 'HomeController@chatBot')->name('chatbot');
+
 
 // Payment
 Route::get('/payment/{id}', 'PaymentController@show');
 Route::post('/payment/{id}/confirm', 'PaymentController@confirm');
+Route::get('/mobile-pay/{id}', 'PaymentController@mobilePay')->name('mobile.pay');
+Route::post('/mobile-pay/{id}/confirm', 'PaymentController@mobileConfirm')->name('mobile.pay.confirm');
+Route::get('/payment/{id}/status', 'PaymentController@checkStatus')->name('payment.status');
+Route::post('/payment/confirm/{id}', 'PaymentController@confirm')->name('payment.confirm');
+
+// VNPay
+Route::post('/payment/{id}/vnpay', 'PaymentController@vnpay_payment')->name('payment.vnpay');
+Route::get('/payment/vnpay/return', 'PaymentController@vnpay_return')->name('payment.vnpay.return');
 
 // Admin registrations
 Route::get('/admin/registrations', 'Admin\\RegistrationController@index');
 Route::post('/admin/registrations/confirm/{id}', 'Admin\\RegistrationController@confirm');
+
 
 // Auth + Verify Email
 Auth::routes(['verify' => true]);
@@ -77,3 +89,4 @@ Route::namespace('Student')
 
 // Show course detail
 Route::get('/course/{course}', 'CourseController@showCourse')->name('course.show');
+

@@ -11,6 +11,15 @@
                 <h3 class="title">Register the course</h3>
             </a>
         </div>
+        @if ($errors->any())
+    <div style="background:#ffe6e6;padding:10px;border-radius:6px;margin-bottom:15px;">
+        <ul style="color:red;margin:0;padding-left:20px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <form method="POST" action="{{ route('register-course.store', $course->id) }}">
             @csrf
@@ -49,8 +58,8 @@
             </div>
 
             <div class="form-group">
-                <label for="phone_number">Phone number</label>
-                <input type="text" name="phone_number" id="phone_number" class="form__input" placeholder="Enter phone number">
+                <label for="phone">Phone number</label>
+                <input type="text" name="phone" id="phone" class="form__input" placeholder="Enter phone number">
             </div>
 
             @if(Session::has('message'))

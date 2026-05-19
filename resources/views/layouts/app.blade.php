@@ -161,7 +161,7 @@
             </div>
 
             <div class="chatbox__footer">
-                <form id="form_submit_chat" method="get">
+                <form id="form_submit_chat" method="post">
                     @csrf
                     <input id="text_chat" type="text" name="text_chat" placeholder="Write a message..." autocomplete="off">
                     <button type="submit" class="btn btn-primary">Send</button>
@@ -180,17 +180,47 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        const chatButton = document.querySelector(".chatbox__button button");
-        const chatSupport = document.querySelector(".chatbox__support");
+    const chatButton = document.querySelector(".chatbox__button button");
+    const chatSupport = document.querySelector(".chatbox__support");
 
-        chatButton.addEventListener("click", function () {
-            if (chatSupport.style.display === "block") {
-                chatSupport.style.display = "none";
-            } else {
-                chatSupport.style.display = "block";
+    chatButton.addEventListener("click", function () {
+        chatSupport.style.display = (chatSupport.style.display === "block") ? "none" : "block";
+    });
+
+    $("#form_submit_chat").on("submit", function(e) {
+        e.preventDefault();
+
+        let msg = $("#text_chat").val();
+        if(msg.trim() === "") return;
+
+        $("#chatbot").append(`
+            <div class="messages__item messages__item--operator">${msg}</div>
+        `);
+
+        $("#text_chat").val("");
+
+        $.ajax({
+            url: "/chatbot/gemini",
+            method: "POST",
+            data: {
+                message: msg,
+                _token: $("meta[name='csrf-token']").attr("content")
+            },
+            success: function(res) {
+                $("#chatbot").append(`
+                    <div class="messages__item messages__item--visitor">${res.reply}</div>
+                `);
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                $("#chatbot").append(`
+                    <div class="messages__item messages__item--visitor">Lỗi server!</div>
+                `);
             }
         });
-    </script>
+    });
+</script>
+    
 
 </body>
 

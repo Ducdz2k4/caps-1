@@ -35,9 +35,21 @@ public function create(Request $request, Course $course)
         ]);
     }
 
-    //  nếu đã đăng ký lớp rồi thì báo lỗi
-    if ($user->classes()->where('class_id', $data['class'])->exists()) {
-        return redirect()->back()->with('message', 'Bạn đã đăng ký lớp này rồi!');
+        // nếu đã có registration của lớp này
+    $existingRegistration = \App\Registration::where('email', $data['email'])
+        ->where('course_id', $course->id)
+        ->where('class_id', $data['class'])
+        ->orderBy('id', 'desc')
+        ->first();
+
+    if ($existingRegistration) {
+        if ($existingRegistration->payment_status == 'paid') {
+            return redirect()->back()->with('message', 'Bạn đã đăng ký và thanh toán lớp này rồi!');
+        } else {
+            // chưa thanh toán -> quay lại trang payment
+            return redirect('/payment/' . $existingRegistration->id)
+                ->with('message', 'Bạn đã đăng ký lớp này nhưng chưa thanh toán. Vui lòng thanh toán để hoàn tất.');
+        }
     }
 
     //  attach class không bị lỗi trùng

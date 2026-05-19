@@ -26,7 +26,6 @@
         margin-bottom: 15px;
     }
 
-    /* ===== FIX TABLE ===== */
     .exam-table {
         width: 100%;
         border-collapse: collapse;
@@ -91,7 +90,6 @@
 
         <div id="minute" style="display:none">{{ $exam->total_time }}</div>
 
-        <!-- FIX TABLE -->
         <table class="exam-table">
             <thead>
                 <tr>
@@ -131,52 +129,71 @@
     <div class="card-box">
         <form id="formQuiz" method="POST" action="{{ route('student.exam.quiz.check',$exam->id) }}" onsubmit="return checkSubmit()">
             @csrf
-
             <div id="questions"></div>
-
-         
         </form>
     </div>
 
 </div>
 
 <script>
-    let totalTime = parseInt(document.getElementById('minute').innerText) * 60;
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ===== FIX lỗi null =====
+    let minuteEl = document.getElementById('minute');
+    let totalTime = parseInt(minuteEl?.innerText || 0) * 60;
+
     let timeLeft = totalTime;
     let minSubmitTime = totalTime * (2/3);
 
     let startTime = 0;
     let warningCount = 0;
     let isLocked = false;
-
     let isStarted = false; 
     let timer; 
 
+    // ===== BẮT ĐẦU LÀM BÀI =====
+    document.getElementById("formSelectLevel").addEventListener("submit", function(e) {
+        e.preventDefault();
 
-    // TIMER
- function startTimer() {
-    timer = setInterval(() => {
+        if (isStarted) return;
 
-        let m = Math.floor(timeLeft / 60);
-        let s = timeLeft % 60;
+        isStarted = true;
 
-        document.getElementById("timer").innerHTML =
-            "⏰ " + m + ":" + (s < 10 ? "0" : "") + s;
+        // 👉 ghi nhận thời gian bắt đầu
+        startTime = Date.now();
 
-        timeLeft--;
+        // 👉 ẩn form chọn level
+        this.style.display = "none";
 
-        if (timeLeft < 0) {
-            clearInterval(timer);
-            alert("⏰ Hết giờ! Tự động nộp bài");
-            document.getElementById("formQuiz").submit();
-        }
+        // 👉 chạy timer
+        startTimer();
+    });
 
-    }, 1000);
-}
+    // ===== TIMER =====
+    function startTimer() {
+        timer = setInterval(() => {
 
-    // CHẶN TAB
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
+
+            document.getElementById("timer").innerHTML =
+                "⏰ " + m + ":" + (s < 10 ? "0" : "") + s;
+
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                clearInterval(timer);
+                alert("⏰ Hết giờ! Tự động nộp bài");
+                document.getElementById("formQuiz").submit();
+            }
+
+        }, 1000);
+    }
+
+    // ===== CHẶN TAB =====
     document.addEventListener("visibilitychange", function () {
         if (!isStarted) return;
+
         if (document.hidden) {
             warningCount++;
 
@@ -192,6 +209,8 @@
     function lockExam() {
         isLocked = true;
 
+        clearInterval(timer); // 👉 FIX
+
         document.querySelectorAll("input, button, select").forEach(el => {
             el.disabled = true;
         });
@@ -199,9 +218,15 @@
         document.body.innerHTML += "<h2 style='color:red;text-align:center'>❌ Bài thi đã bị khóa</h2>";
     }
 
-    function checkSubmit() {
+    // ===== CHẶN NỘP SỚM =====
+    window.checkSubmit = function () {
         let now = Date.now();
         let timePassed = (now - startTime) / 1000;
+
+        if (!isStarted) {
+            alert("❌ Bạn chưa bắt đầu làm bài!");
+            return false;
+        }
 
         if (isLocked) {
             alert("❌ Bài đã bị khóa!");
@@ -217,11 +242,14 @@
         return true;
     }
 
-  window.onbeforeunload = function () {
-    if (isStarted) {
-        return "Bạn đang làm bài thi!";
-    }
-};
+    // ===== CHẶN RELOAD =====
+    window.onbeforeunload = function () {
+        if (isStarted && !isLocked) {
+            return "Bạn đang làm bài thi!";
+        }
+    };
+
+});
 </script>
 
 @endsection
